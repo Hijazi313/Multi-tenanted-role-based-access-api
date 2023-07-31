@@ -5,8 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev":"tsx watch src/main.ts",
-    "migrate":"drizzle-kit generate:pg"
+    "dev": "tsx watch src/main.ts",
+    "migrate": "drizzle-kit generate:pg",
+    "release":"standard-version"
   },
   "keywords": [],
   "author": "",
@@ -29,6 +30,7 @@
     "@types/jsonwebtoken": "^9.0.2",
     "@types/pg": "^8.10.2",
     "drizzle-kit": "^0.19.12",
+    "standard-version": "^9.5.0",
     "tsx": "^3.12.7",
     "typescript": "^5.1.6",
     "zod-to-json-schema": "^3.21.4"
