@@ -1,14 +1,16 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { CreateUserBody } from "./users.schema";
+import { CreateUserBody, LoginBody } from "./users.schema";
 import { SYSTEM_ROLE } from "../../config/permissions";
 import { getRolesByName } from "../roles/roles.service";
 import {
   assignRoleToUser,
   createUser,
+  getUserByEmail,
   getUsersByApplication,
 } from "./users.service";
 import { DrizzleError } from "drizzle-orm";
 import { ZodError } from "zod";
+import jwt from "jsonwebtoken";
 
 export async function createUserHandler(
   req: FastifyRequest<{ Body: CreateUserBody }>,
@@ -58,4 +60,30 @@ export async function createUserHandler(
       message: err,
     });
   }
+}
+
+export async function logInHandler(
+  req: FastifyRequest<{
+    Body: LoginBody;
+  }>,
+  reply: FastifyReply
+) {
+  const { applicationId, email, password } = req.body;
+
+  const user = await getUserByEmail({ email, applicationId });
+  if (!user) {
+    return reply.code(400).send({
+      message: "Invalid email or password",
+    });
+  }
+  return user;
+  const token = jwt.sign(
+    {
+      email,
+      applicationId,
+    },
+    "secret"
+  ); //change this scret or signing  or get fired
+
+  return token;
 }
